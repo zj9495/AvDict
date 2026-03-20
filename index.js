@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
+import { createInterface } from 'readline';
 import { program } from 'commander';
 import { createRequire } from 'module';
 import { search } from './lib/fetcher.js';
 import { display } from './lib/display.js';
-import { clearCache } from './lib/cache.js';
+import { clearCache, setConfig } from './lib/cache.js';
 import ora from 'ora';
 import chalk from 'chalk';
 
@@ -18,7 +19,39 @@ program
     .argument('[番号]', '要查询的番号，例如: SSIS-001')
     .option('-r, --raw', '显示原始详细数据')
     .option('--clear-cache', '清空本地缓存')
+    .option('--setup', '配置JAVDB Cookie（可选，提高查询覆盖率）')
     .action(async (id, options) => {
+
+        if (options.setup) {
+            console.log('');
+            console.log(chalk.yellow('=== 配置 JAVDB Cookie（可选）==='));
+            console.log('');
+            console.log('不配置也可以正常使用，配置后覆盖率更高。');
+            console.log('');
+            console.log('获取步骤：');
+            console.log('  1. Chrome 打开 https://javdb.com 并登录账号');
+            console.log('  2. 安装插件 "Get cookies.txt LOCALLY"');
+            console.log('  3. 导出 Cookie 文件，找到 _jdb_session 那行');
+            console.log('  4. 复制最后一列的值粘贴到下面');
+            console.log('');
+
+            const rl = createInterface({ input: process.stdin, output: process.stdout });
+            await new Promise((resolve) => {
+                rl.question(chalk.cyan('请粘贴 _jdb_session 的值（直接回车跳过）: '), (session) => {
+                    rl.close();
+                    if (!session.trim()) {
+                        console.log(chalk.gray('\n已跳过，使用 JAVBUS + JavLibrary 作为数据源。'));
+                    } else {
+                        setConfig({ session: session.trim() });
+                        console.log(chalk.green('\n✅ 配置保存成功！'));
+                        console.log(chalk.gray('保存位置: ~/.config/javinfo/config.json'));
+                    }
+                    console.log('');
+                    resolve();
+                });
+            });
+            process.exit(0);
+        }
 
         if (options.clearCache) {
             clearCache();
