@@ -186,6 +186,17 @@ A: Roughly every 2 weeks. If niche titles that previously worked start returning
 
 A: Yes. Enter the title in hyphen format, e.g. `031926-100`. The tool auto-detects FC2 format and handles the conversion internally.
 
+**Q: Does it work in mainland China?**
+
+A: All data sources are hosted outside mainland China and require a proxy to access. If queries consistently fail, run the following commands to check your network connectivity:
+```bash
+curl -sL --connect-timeout 5 "https://www.javbus.com" -o /dev/null -w "JAVBUS: %{http_code}\n"
+curl -sL --connect-timeout 5 "https://www.njav.com" -o /dev/null -w "NJAV: %{http_code}\n"
+curl -sL --connect-timeout 5 "https://www.google.com" -o /dev/null -w "Google: %{http_code}\n"
+```
+
+A response of `200` means the site is reachable. A response of `000` means the connection failed — check your proxy settings.
+
 ---
 
 ## Data Sources

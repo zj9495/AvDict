@@ -188,6 +188,17 @@ A: 通常 2 周左右，当出现冷门番号突然查不到时，运行 `jav --
 
 A: 支持，输入格式为 `031926-100`（连字符格式），工具会自动识别并转换格式查询。
 
+**Q: 在中国大陆能用吗？**
+
+A: 所有数据源均需要访问境外网站，在中国大陆必须配合代理（科学上网）才能正常使用。如果查询总是失败，可以用以下命令测试网络连通性：
+```bash
+curl -sL --connect-timeout 5 "https://www.javbus.com" -o /dev/null -w "JAVBUS: %{http_code}\n"
+curl -sL --connect-timeout 5 "https://www.njav.com" -o /dev/null -w "NJAV: %{http_code}\n"
+curl -sL --connect-timeout 5 "https://www.google.com" -o /dev/null -w "Google: %{http_code}\n"
+```
+
+返回 `200` 表示可以访问，返回 `000` 表示无法连接，需要检查代理设置。
+
 ---
 
 ## 数据来源

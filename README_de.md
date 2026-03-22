@@ -173,9 +173,31 @@ A: Es gibt drei mögliche Ursachen：
 
 A: JAVDB ist unter Windows aufgrund von Cloudflare-Einschränkungen nicht verfügbar. Eine kleine Anzahl von Titeln, die nur in JAVDB existieren, kann unter Windows nicht gefunden werden. Für vollständige Abdeckung empfehlen wir eine Linux-Umgebung（z.B. Raspberry Pi）.
 
+**F: Ich erhalte `Permission denied` bei der Installation？**
+
+A: Für die globale Installation sind erhöhte Rechte erforderlich：
+```bash
+sudo npm install -g .
+```
+
+**F: Wie oft muss ich meinen Cookie aktualisieren？**
+
+A: Ungefähr alle 2 Wochen. Wenn zuvor funktionierende Nischen-Titel plötzlich nicht mehr gefunden werden, ist dein Cookie wahrscheinlich abgelaufen — führe `jav --setup` aus, um ihn zu aktualisieren.
+
 **F: Werden FC2-Amateur-Titel unterstützt?**
 
 A: Ja. Gib den Titel im Bindestrich-Format ein, z.B. `031926-100`. Das Tool erkennt das FC2-Format automatisch und wandelt es intern um.
+
+**F: Funktioniert es in China?**
+
+A: Alle Datenquellen sind auf Servern außerhalb Chinas gehostet und in China geblockt. Ein Proxy ist erforderlich. Falls Abfragen fehlschlagen, teste die Netzwerkverbindung mit diesen Befehlen：
+```bash
+curl -sL --connect-timeout 5 "https://www.javbus.com" -o /dev/null -w "JAVBUS: %{http_code}\n"
+curl -sL --connect-timeout 5 "https://www.njav.com" -o /dev/null -w "NJAV: %{http_code}\n"
+curl -sL --connect-timeout 5 "https://www.google.com" -o /dev/null -w "Google: %{http_code}\n"
+```
+
+`200` bedeutet erreichbar, `000` bedeutet keine Verbindung — überprüfe deine Proxy-Einstellungen.
 
 ---
 

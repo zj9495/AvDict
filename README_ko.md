@@ -173,9 +173,31 @@ A: 가능한 원인：
 
 A: Windows에서는 Cloudflare 제한으로 JAVDB를 사용할 수 없습니다. JAVDB에만 등록된 일부 번호는 Windows에서 검색할 수 없습니다. 완전한 검색 결과를 위해서는 Linux 환경（예: Raspberry Pi）사용을 권장합니다.
 
+**Q: `Permission denied` 가 표시되면？**
+
+A: 전역 설치에는 관리자 권한이 필요합니다：
+```bash
+sudo npm install -g .
+```
+
+**Q: Cookie는 얼마나 자주 업데이트해야 하나요？**
+
+A: 보통 약 2주마다입니다. 이전에 검색되던 마이너 번호가 갑자기 검색되지 않으면 Cookie가 만료된 것입니다 — `jav --setup`을 실행하여 갱신하세요.
+
 **Q: FC2 소인 번호도 지원하나요？**
 
 A: 지원합니다. `031926-100`과 같은 하이픈 형식으로 입력하세요. 도구가 자동으로 형식을 변환하여 검색합니다.
+
+**Q: 중국 본토에서도 사용할 수 있나요？**
+
+A: 모든 데이터 소스는 중국 본토에서 접근할 수 없는 해외 사이트입니다. 중국 본토에서는 프록시（VPN）가 필요합니다. 검색이 계속 실패한다면 아래 명령어로 네트워크 연결을 확인하세요：
+```bash
+curl -sL --connect-timeout 5 "https://www.javbus.com" -o /dev/null -w "JAVBUS: %{http_code}\n"
+curl -sL --connect-timeout 5 "https://www.njav.com" -o /dev/null -w "NJAV: %{http_code}\n"
+curl -sL --connect-timeout 5 "https://www.google.com" -o /dev/null -w "Google: %{http_code}\n"
+```
+
+`200` 이 반환되면 접속 가능, `000` 이 반환되면 접속 불가입니다. 프록시 설정을 확인하세요.
 
 ---
 

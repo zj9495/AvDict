@@ -173,9 +173,31 @@ A: 考えられる原因：
 
 A: Windows では Cloudflare の制限により JAVDB が使用できません。JAVDB にのみ収録されている一部の作品は Windows では検索できません。完全な検索結果を得るには Linux 環境（Raspberry Pi など）の使用を推奨します。
 
+**Q: `Permission denied` と表示される？**
+
+A: グローバルインストールには管理者権限が必要です：
+```bash
+sudo npm install -g .
+```
+
+**Q: Cookie はどのくらいの頻度で更新が必要ですか？**
+
+A: 通常は約2週間ごとです。以前は検索できていたマイナー作品が見つからなくなったら、Cookie の有効期限切れの可能性があります — `jav --setup` を実行して更新してください。
+
 **Q: FC2 素人番号は対応していますか？**
 
 A: 対応しています。`031926-100` のようなハイフン形式で入力してください。ツールが自動的に形式を変換して検索します。
+
+**Q: 中国本土でも使えますか？**
+
+A: すべてのデータソースは中国本土からアクセスできない海外サイトです。中国本土ではプロキシ（VPN）が必要です。検索が失敗する場合は、以下のコマンドでネットワーク接続を確認してください：
+```bash
+curl -sL --connect-timeout 5 "https://www.javbus.com" -o /dev/null -w "JAVBUS: %{http_code}\n"
+curl -sL --connect-timeout 5 "https://www.njav.com" -o /dev/null -w "NJAV: %{http_code}\n"
+curl -sL --connect-timeout 5 "https://www.google.com" -o /dev/null -w "Google: %{http_code}\n"
+```
+
+`200` が返ってくれば接続可能、`000` が返ってくれば接続不可です。プロキシ設定を確認してください。
 
 ---
 
