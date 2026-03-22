@@ -1,3 +1,5 @@
+English | [中文](README_zh.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md)
+
 # AvDict 🎬
 
 > A command-line tool to look up JAV metadata by title ID — cast, release date, studio, and more
