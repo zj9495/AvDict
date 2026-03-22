@@ -1,7 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { display } from '../lib/display.js';
 
-// 完整的 mock 数据
 const MOCK_INFO = {
     id: 'SSIS-001',
     title: '测试标题',
@@ -20,7 +19,6 @@ const MOCK_INFO = {
 
 describe('display.js', () => {
     beforeEach(() => {
-        // 拦截 console.log，不真正打印，但可以断言调用内容
         vi.spyOn(console, 'log').mockImplementation(() => {});
     });
 
@@ -47,7 +45,6 @@ describe('display.js', () => {
     it('display：raw 模式输出 JSON 字符串', () => {
         display(MOCK_INFO, true);
         const allOutput = console.log.mock.calls.flat().join(' ');
-        // raw 模式应该输出可解析的 JSON
         expect(() => JSON.parse(allOutput)).not.toThrow();
     });
 
