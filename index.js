@@ -56,7 +56,7 @@ program
         }
 
         if (options.clearCache) {
-            clearCache();
+            clearCache(options.lang || 'zh');   // 支持 -l zh/en/jp 等
             process.exit(0);
         }
 
