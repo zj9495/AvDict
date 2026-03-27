@@ -1,19 +1,19 @@
+// 为 Node 18 提供 Web API polyfill
 import { beforeAll } from 'vitest';
 
-// 为 Node 18 提供缺失的 Web API（File, FormData 等）
 beforeAll(() => {
-    if (typeof File === 'undefined') {
+    if (typeof global.File === 'undefined') {
         global.File = class File {
             constructor(bits, name, options = {}) {
                 this.bits = bits;
                 this.name = name;
                 this.type = options.type || '';
-                this.size = bits.length || 0;
+                this.size = bits?.length || 0;
             }
         };
     }
 
-    if (typeof FormData === 'undefined') {
+    if (typeof global.FormData === 'undefined') {
         global.FormData = class FormData {
             constructor() {
                 this.data = new Map();
@@ -25,15 +25,17 @@ beforeAll(() => {
     }
 });
 
+// =====================================================
+
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-// mock execSync，避免真实的 curl 网络请求
+// Mock child_process
 vi.mock('child_process', () => ({
     execSync: vi.fn(),
     spawnSync: vi.fn(),
 }));
 
-// mock cache，避免缓存干扰测试结果
+// Mock cache
 vi.mock('../lib/cache.js', () => ({
     getCache: vi.fn().mockReturnValue(null),
     setCache: vi.fn(),
@@ -43,7 +45,7 @@ vi.mock('../lib/cache.js', () => ({
 import { execSync } from 'child_process';
 import { search } from '../lib/fetcher.js';
 
-// 模拟 JAVBUS 详情页 HTML
+// 模拟 HTML 数据
 const MOCK_JAVBUS_HTML = `
 <html>
   <head><title>SSIS-001</title></head>
@@ -71,7 +73,6 @@ const MOCK_JAVBUS_HTML = `
 </html>
 `;
 
-// 模拟 404 页面
 const MOCK_404_HTML = `
 <html>
   <head><title>404</title></head>
