@@ -3,7 +3,7 @@
 import { createInterface } from 'readline';
 import { program } from 'commander';
 import { createRequire } from 'module';
-import { search } from './lib/fetcher.js';
+import { search, fetchJavbusMagnets } from './lib/fetcher.js';
 import { display } from './lib/display.js';
 import { clearCache, setConfig } from './lib/cache.js';
 import ora from 'ora';
@@ -19,6 +19,7 @@ program
     .version(pkg.version, '-v, --version')
     .argument('[番号]', '要查询的番号，例如: SSIS-001')
     .option('-r, --raw', '显示原始详细数据')
+    .option('-m, --magnet', '额外输出 JAVBUS 磁力链接')
     .option('--clear-cache', '清空本地缓存')
     .option('--setup', '配置JAVDB Cookie（可选，提高查询覆盖率）')
     .option('-l, --lang <lang>', '显示语言 zh/en/jp/kr/de', 'zh')
@@ -83,7 +84,16 @@ program
                 process.exit(1);
             }
 
-            display(result, options.raw, lang);
+            if (!Array.isArray(result.magnets)) {
+                result.magnets = [];
+            }
+
+            if (options.magnet) {
+                const magnets = fetchJavbusMagnets((result.id || id).toUpperCase());
+                result.magnets = magnets;
+            }
+
+            display(result, options.raw, lang, options.magnet);
         } catch (err) {
             spinner.stop();
             console.error(`\n${t.queryFailed}:`, err.message);

@@ -108,6 +108,15 @@ jav -l en SSIS-001       # shorthand
 jav -r SSIS-001
 ```
 
+**Append JAVBUS magnet links:**
+
+```bash
+jav -m SSIS-001
+jav --magnet SSIS-001
+```
+
+With `-r --magnet`, output stays JSON-only and magnet links are in the `magnets` field.
+
 **Clear local cache:**
 
 ```bash
@@ -140,6 +149,7 @@ Options:
   -v, --version         Print version number
   -l, --lang <lang>     Output language: zh/en/jp/kr/de (default: zh)
   -r, --raw             Output raw JSON instead of formatted display
+  -m, --magnet          Append JAVBUS magnet links
   --setup               Configure JAVDB Cookie (optional, improves coverage)
   --clear-cache         Clear local result cache
   -h, --help            Show help

@@ -43,7 +43,7 @@ vi.mock('../lib/cache.js', () => ({
 }));
 
 import { execSync } from 'child_process';
-import { search } from '../lib/fetcher.js';
+import { search, fetchJavbusMagnets } from '../lib/fetcher.js';
 
 // 模拟 HTML 数据
 const MOCK_JAVBUS_HTML = `
@@ -67,6 +67,9 @@ const MOCK_JAVBUS_HTML = `
         <span class="genre"><a>独占</a></span>
         <span class="genre"><a>美少女</a></span>
         <div class="star-name"><a>天使もえ</a></div>
+        <a href="magnet:?xt=urn:btih:aaa111&dn=one">磁力1</a>
+        <a href="magnet:?xt=urn:btih:bbb222&dn=two">磁力2</a>
+        <a href="magnet:?xt=urn:btih:aaa111&dn=one">磁力1-重复</a>
       </div>
     </div>
   </body>
@@ -121,11 +124,32 @@ describe('fetcher.js', () => {
         const expectedFields = [
             'id', 'title', 'actresses', 'actors',
             'releaseDate', 'duration', 'studio', 'label',
-            'director', 'series', 'tags', 'coverUrl', 'score',
+            'director', 'series', 'tags', 'coverUrl', 'score', 'magnets',
         ];
 
         expectedFields.forEach(field => {
             expect(result).toHaveProperty(field);
         });
+
+        expect(Array.isArray(result.magnets)).toBe(true);
+        expect(result.magnets).toEqual([]);
+    });
+
+    it('fetchJavbusMagnets：页面包含磁链时返回去重列表', () => {
+        execSync.mockReturnValue(Buffer.from(MOCK_JAVBUS_HTML));
+
+        const magnets = fetchJavbusMagnets('SSIS-001');
+
+        expect(magnets).toEqual([
+            'magnet:?xt=urn:btih:aaa111&dn=one',
+            'magnet:?xt=urn:btih:bbb222&dn=two',
+        ]);
+    });
+
+    it('fetchJavbusMagnets：页面无磁链时返回空数组', () => {
+        execSync.mockReturnValue(Buffer.from(MOCK_404_HTML));
+
+        const magnets = fetchJavbusMagnets('INVALID-999');
+        expect(magnets).toEqual([]);
     });
 });

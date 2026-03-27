@@ -110,6 +110,15 @@ jav -l en SSIS-001       # 缩写
 jav -r SSIS-001
 ```
 
+**附加输出 JAVBUS 磁力链接：**
+
+```bash
+jav -m SSIS-001
+jav --magnet SSIS-001
+```
+
+`-r --magnet` 时仍只输出 JSON，磁链会出现在 `magnets` 字段中。
+
 **清空本地缓存：**
 
 ```bash
@@ -142,6 +151,7 @@ Options:
   -v, --version         显示版本号
   -l, --lang <语言>      输出语言：zh/en/jp/kr/de（默认：zh）
   -r, --raw             以原始 JSON 格式输出结果
+  -m, --magnet          额外输出 JAVBUS 磁力链接
   --setup               配置 JAVDB Cookie（可选，提高覆盖率）
   --clear-cache         清空本地缓存
   -h, --help            显示帮助信息

@@ -15,6 +15,7 @@ const MOCK_INFO = {
     tags: ['独占', '美少女'],
     coverUrl: 'https://example.com/cover.jpg',
     score: '4.5分',
+    magnets: ['magnet:?xt=urn:btih:aaa111'],
 };
 
 describe('display.js', () => {
@@ -46,10 +47,24 @@ describe('display.js', () => {
         display(MOCK_INFO, true);
         const allOutput = console.log.mock.calls.flat().join(' ');
         expect(() => JSON.parse(allOutput)).not.toThrow();
+        expect(JSON.parse(allOutput)).toHaveProperty('magnets');
     });
 
     it('display：空字段不影响正常输出', () => {
         const sparseInfo = { ...MOCK_INFO, actors: [], tags: [], coverUrl: '' };
         expect(() => display(sparseInfo)).not.toThrow();
+    });
+
+    it('display：showMagnet=true 时输出磁力链接区块', () => {
+        display(MOCK_INFO, false, 'zh', true);
+        const allOutput = console.log.mock.calls.flat().join(' ');
+        expect(allOutput).toContain('磁力链接');
+        expect(allOutput).toContain('magnet:?xt=urn:btih:aaa111');
+    });
+
+    it('display：showMagnet=true 且无磁链时输出提示', () => {
+        display({ ...MOCK_INFO, magnets: [] }, false, 'zh', true);
+        const allOutput = console.log.mock.calls.flat().join(' ');
+        expect(allOutput).toContain('未找到磁力链接');
     });
 });
